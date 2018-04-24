@@ -2,7 +2,7 @@
 // Created by chauncey on 18-4-24.
 //
 #include "Utility/tinyxml2/tinyxml2.h"
-
+#include "Utility/tinyxml2/tinyxml2.cpp"
 #include "func.h"
 
 void addRoad(Graph &Map_Graph, Point A, Point B, double length) {

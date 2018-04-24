@@ -4,7 +4,7 @@
 
 int main() {
     Graph Map_Graph;
-    parseMap(Map_Graph, "../map.xml");
+    parseMap(Map_Graph, "../res/map.xml");
     //generateTestGraph(&Map_Graph);
     //Map_Graph.showRoadTable(0);
     cout << "Parse succeed" << endl;
