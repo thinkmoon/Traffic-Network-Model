@@ -10,14 +10,15 @@ void addRoad(Graph &Map_Graph, Point A, Point B, double length) {
     auto site_A = -1;
     auto point_num = Map_Graph.point.size();
     auto roadID = Map_Graph.road.size();
-    Road m_road(A, B, length);
-    Map_Graph.road.push_back(m_road);
+
     for (int i = 0; i < point_num; i++) {
         if (Map_Graph.point[i] == A) {
             site_A = i;
+            break;
         }
         if (Map_Graph.point[i] == B) {
             site_B = i;
+            break;
         }
     }
     if (site_A == -1) {
@@ -38,6 +39,10 @@ void addRoad(Graph &Map_Graph, Point A, Point B, double length) {
     }
     Map_Graph.RoadTable[site_A].addNode(site_B, length, roadID);
     Map_Graph.RoadTable[site_B].addNode(site_A, -length, roadID);
+    A.m_nID = site_A;
+    B.m_nID = site_B;
+    Road m_road(A, B, length);
+    Map_Graph.road.push_back(m_road);
 }
 
 void StringAddInt(string &str, int i) {
@@ -59,7 +64,7 @@ void generateTestGraph(Graph &G) {
 }
 
 void calcShortestPath(Graph *G) {
-    ofstream out("../res/route.txt");
+    ofstream out(DIR_RES"route.txt");
     for (int V_begin = 0; V_begin < G->point.size(); V_begin++) {
         vector<bool> S(G->point.size(), false);
         vector<double> Determined_dist(G->point.size(), 0.0);
@@ -90,9 +95,11 @@ void calcShortestPath(Graph *G) {
 //        for(auto item:Estimated_dist){cout << item << " ";}cout<<endl;
 //        cout << V_node << endl;
         }
-        string str;
-        for (const auto item:path) { if (item.empty() && item.size() < G->point.size()) str += item + "\n"; }
-        out << str;
+        for (auto item:path) {
+            if (!item.empty() && item.size() < G->point.size()) {
+                out << item << endl;
+            }
+        }
     }
 }
 
@@ -115,7 +122,7 @@ void parseMap(Graph &Map_Graph, const char *MapFileName) {
             elm_Road = elm_Road->NextSiblingElement("road");
         }
     } else {
-        cout << "The map file loading failed" << endl;
+        cout << MapFileName << " The map file loading failed" << endl;
         exit(1);
     }
 }

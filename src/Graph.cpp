@@ -22,7 +22,7 @@ void Graph::showRoadTable(int num) {
             RoadNode *p = item.link;
             cout << " link:";
             while (p != nullptr) {
-                cout << " -> road[" << p->junctionID << "](" << p->length << ")";
+                cout << " -> road[" << p->roadID << "] " << "TO:" << p->junctionID << "(" << p->length << ")";
                 p = p->link;
             }
             cout << endl;

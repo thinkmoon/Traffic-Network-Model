@@ -16,10 +16,18 @@ class Road {
 public:
     Road(Point CPoint_from, Point CPoint_to, double dLength) : m_CPoint_from(CPoint_from), m_CPoint_to(CPoint_from),
                                                                m_dLength(dLength) {};
+
+    void showqueVehicle() {
+        cout << " pos Vehicle" << endl;
+        cout << this->m_queVehicle_pos.size();
+        cout << " neg Vehicle" << endl;
+        cout << this->m_queVehicle_neg.size();
+    }
 public:
     double m_dLength;
     Point m_CPoint_from, m_CPoint_to;
-    queue<Vehicle> m_queVehicle;
+    int m_nCongestion_pos, m_nCongestion_neg; //(50 * car / length),[0,100]
+    deque<Vehicle> m_queVehicle_pos, m_queVehicle_neg;
 };
 
 
