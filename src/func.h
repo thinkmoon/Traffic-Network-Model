@@ -26,6 +26,7 @@ void calcShortestPath(Graph *G);
  */
 void StringAddInt(string &str, int i);
 
+
 /**
  * add road to traffic-network
  * @param G the reference of Graph

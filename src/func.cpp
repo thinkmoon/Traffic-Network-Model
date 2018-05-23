@@ -45,12 +45,6 @@ void addRoad(Graph &Map_Graph, Point A, Point B, double length) {
     Map_Graph.road.push_back(m_road);
 }
 
-void StringAddInt(string &str, int i) {
-    stringstream stream;
-    stream << i << " ";
-    str = str + stream.str();
-}
-
 void generateTestGraph(Graph &G) {
     Point v1(1, 3), v2(1, 2), v3(2, 1), v4(3, 2), v5(3, 3), v6(2, 4);
     addRoad(G, v2, v3, 5);
@@ -63,41 +57,58 @@ void generateTestGraph(Graph &G) {
     addRoad(G, v1, v6, 100);
 }
 
+void StringAddInt(string &str, int i) {
+    stringstream stream;
+    stream << i << " ";
+    str = str + stream.str();
+}
+
 void calcShortestPath(Graph *G) {
     ofstream out(DIR_RES"route.txt");
+    //对点进行的一级遍历
     for (int V_begin = 0; V_begin < G->point.size(); V_begin++) {
-        vector<bool> S(G->point.size(), false);
-        vector<double> Determined_dist(G->point.size(), 0.0);
-        vector<double> Estimated_dist(G->point.size(), DBL_MAX);
-        vector<string> path(G->point.size());
-        Determined_dist[V_begin] = 0;
-        StringAddInt(path[V_begin], V_begin);
+        vector<bool> S(G->point.size(), false); //判断是否选中
+        vector<double> Determined_dist(G->point.size(), 0.0);// 确定的距离向量
+        vector<double> Estimated_dist(G->point.size(), DBL_MAX);// 预估的距离向量
+        vector<vector<int>> v_nPointPath(G->point.size());// 以点为准的路径
+        Determined_dist[V_begin] = 0;   // 先置初值为零
+        v_nPointPath[V_begin].push_back(V_begin); // 零到零为本身
         int V_node = V_begin; //Ｖ_node作为正在进行出度遍历点的节点索引
         int count = 0;
+        // 对点进行的二级遍历
         while (++count <= G->point.size()) {
             auto p = G->RoadTable[V_node].link;
+            // 寻找邻接点
             while (p != nullptr) {
                 if (S[p->junctionID] == false &&
                     (fabs(p->length) + Determined_dist[V_node]) < Estimated_dist[p->junctionID]) {
                     Estimated_dist[p->junctionID] = fabs(p->length) + Determined_dist[V_node];
-                    path[p->junctionID] = path[V_node];
+                    v_nPointPath[p->junctionID] = v_nPointPath[V_node];
                 }
                 p = p->link;
             }
             S[V_node] = true;
             auto min = min_element(Estimated_dist.begin(), Estimated_dist.end());
-            unsigned int min_element_index = distance(Estimated_dist.begin(), min);
+            int min_element_index = distance(Estimated_dist.begin(), min);
             Determined_dist[min_element_index] = Estimated_dist[min_element_index];
             Estimated_dist[min_element_index] = DBL_MAX;
-            StringAddInt(path[min_element_index], min_element_index);
+            v_nPointPath[min_element_index].push_back(min_element_index);
             V_node = min_element_index;
 //        for(auto item:Determined_dist){cout << item << " ";}cout<<endl;
 //        for(auto item:Estimated_dist){cout << item << " ";}cout<<endl;
 //        cout << V_node << endl;
         }
-        for (auto item:path) {
-            if (!item.empty() && item.size() < G->point.size()) {
-                out << item << endl;
+        for (auto path:v_nPointPath) {
+            if (!path.empty() && path.size() < G->point.size()) {
+                string strRoutePath;
+                for (int nRoadNum = 0; nRoadNum < path.size() - 1; nRoadNum++) {
+                    int nRoadID = G->getRoadID(path[nRoadNum], path[nRoadNum + 1]);
+                    if (nRoadID != -1) {
+                        StringAddInt(strRoutePath, nRoadID);
+                    }
+                }
+                if (!strRoutePath.empty())
+                    out << strRoutePath << endl;
             }
         }
     }
