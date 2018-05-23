@@ -16,11 +16,8 @@ class Road {
 public:
     Road(Point CPoint_from, Point CPoint_to, double dLength) : m_CPoint_from(CPoint_from), m_CPoint_to(CPoint_from),
                                                                m_dLength(dLength) {};
+    int get_Congeestion();
 
-    void showqueVehicle() {
-        cout << "Vehicle" << endl;
-        cout << this->m_queVehicle.size();
-    }
 public:
     double m_dLength;
     Point m_CPoint_from, m_CPoint_to;

@@ -47,6 +47,18 @@ void Graph::show() {
     showRoadTable(-1);
 }
 
+int Graph::getRoadID(int PointFromID,int PointToID) {
+    int n_RoadID=-1;
+    auto p = RoadTable[PointFromID].link;
+    while(p != nullptr){
+        if(p->junctionID == PointToID){
+            n_RoadID = p->roadID;
+        }
+        p = p->link;
+    }
+    return n_RoadID;
+}
+
 void RoadNode::addNode(int m_ID, double m_length, int roadID) {
     auto node = new RoadNode(m_ID, m_length, roadID);
     if (link == nullptr) {

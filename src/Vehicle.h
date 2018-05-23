@@ -9,33 +9,36 @@
 
 class Vehicle {
 public:
-    Vehicle(queue<int> route, float spec, double distance) : fSpec(spec), dDistance(distance) {
+    Vehicle(int nID,queue<int> route, float spec, double distance) : m_nID(nID),fSpec(spec), dDistance(distance) {
         this->queRoute = route;
     };
 
     void showself() {
-        ofstream out(DIR_RES"vehicle.txt");
+        //ofstream out(DIR_RES"vehicle.txt");
         if (queRoute.empty()) {
-            out << "it is return" << endl;
+            cout << "it[" << m_nID << "] is return" ;
+            cout << "distance have " << dDistance << "m" << endl;
         } else {
-            out << " This is a Vehicle :";
-            out << " it's site is :" << queRoute.front() << endl << " distance:" << dDistance << endl;
-            out << " spec:" << fSpec << endl;
-            out << " it's destination is ";
+            cout << "it[" << m_nID << "] is a Vehicle :";
+            cout << " spec:" << fSpec;
+            cout << " it's destination is ";
             auto r = this->queRoute;
             if (r.empty())
                 return;
-            out << " To :" << r.back() << endl << " route:";
+            cout << " To :" << r.back() ;
+            cout << " it's site is :" << queRoute.front() << " distance:" << dDistance;
+            cout <<  " route:";
             while (!r.empty()) {
-                out << r.front() << " ";
+                cout << r.front() << " ";
                 r.pop();
             }
-            out << endl;
+            cout << endl;
         }
     }
 
 public:
-
+    long long int time=0;
+    int m_nID;
     double dDistance;
     float fSpec; //spec = ( 100 - congestion ) + ( 10 - rand(0,20))
     queue<int> queRoute;

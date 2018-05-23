@@ -39,6 +39,8 @@ public:
      * @param num  Out of degree's num
      */
     void showRoadTable(int num);
+
+    int getRoadID(int PointFromID, int PointToID);
 };
 
 #endif //TRAFFIC_NETWORK_MODEL_GRAPH_H
