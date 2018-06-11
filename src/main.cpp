@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "func.h"
 
+
 long long int SYSTEM_TIME = 0;
 
 vector<queue<int>> v_Route;
@@ -52,7 +53,7 @@ void runSimulation(Graph &G) {
             src.pop_front();
             // 当车的时间戳小于实际时间时，才模拟运行
             if (it.time < SYSTEM_TIME) {
-                it.fSpec = (100 - road.get_Congeestion() - 20) / 3.6;
+                it.fSpec = (100 - road.get_Congestion() - 20) / 3.6;
                 dist = it.dDistance + it.fSpec * 10;
                 it.time++;
                 it.showself();
@@ -81,20 +82,96 @@ void runSimulation(Graph &G) {
     }
 }
 
+class PointPositon {
+public:
+    int RoadID, site;
+    float tan;
+    Point P;
+
+    bool operator<(PointPositon m) const {
+        if (site != m.site) {
+            return site < m.site;
+        } else {
+            return tan < m.tan;
+        }
+    }
+
+};
+
+int computeSite(Point origin, Point aim, float &tan) {
+    int site;
+    float x = aim.m_fLat - origin.m_fLat;
+    float y = aim.m_fLon - origin.m_fLon;
+    //计算坐标系
+    if (x >= 0 && y >= 0) {
+        site = 0;
+    } else if (x <= 0 && y >= 0) {
+        site = 1;
+    } else if (x >= 0 && y <= 0) {
+        site = 2;
+    } else if (x <= 0 && y <= 0) {
+        site = 3;
+    }
+    //计算sinx的值
+    if (y == 0.0) {
+//
+        tan = FLT_MAX;
+    } else {
+        tan = x / y;
+    }
+
+}
+
+vector<int> computePosition(Graph &G, Point origin, RoadNode *res) {
+    vector<int> RoadPosition;
+    vector<PointPositon> PP;
+    while (res) {
+        PointPositon temp;
+        temp.P = G.point[res->junctionID];
+        temp.RoadID = res->roadID;
+        temp.site = computeSite(origin, temp.P, temp.tan);
+        PP.push_back(temp);
+        res = res->link;
+    }
+    sort(PP.begin(), PP.end());
+    for (auto x: PP) {
+        RoadPosition.push_back(x.RoadID);
+    }
+    return RoadPosition;
+}
+
+void initTraffic_Light(Graph &G) {
+    for (auto it = G.RoadTable.begin(); it != G.RoadTable.end(); it++) {
+        it->m_CTrafficLight_Light.setType(it->length);
+        vector<int> RoadPosition;
+        Point origin = G.point[it->junctionID];
+        {
+            RoadPosition = computePosition(G, origin, it->link);
+            switch (RoadPosition.size()) {
+                case 2:
+                    it->m_CTrafficLight_Light.roadID[0] = RoadPosition[0];
+                    it->m_CTrafficLight_Light.roadID[4] = RoadPosition[1];
+            }
+        }
+
+    }
+}
+
 int main() {
     Graph Map_Graph;
     parseMap(Map_Graph, DIR_RES"map.xml");
 //    generateTestGraph(&Map_Graph);
-//    Map_Graph.show();
-//    cout << "Parse succeed" << endl;
+    Map_Graph.show();
+    cout << "Parse succeed" << endl;
+    initTraffic_Light(Map_Graph);
     loadRoute(Map_Graph);
     generateVehicle(Map_Graph);
-    calcShortestPath(&Map_Graph);
+    //calcShortestPath(&Map_Graph);
     int time = 0;
-    while (true) {
-        cout << "现在是" << SYSTEM_TIME++ << "0s " << endl;
-        runSimulation(Map_Graph);
-    }
+//    while (true) {
+//        cout << "现在是" << SYSTEM_TIME++ << "0s " << endl;
+//        runSimulation(Map_Graph);
+//    }
     cout << "end" << endl;
     return 0;
 }

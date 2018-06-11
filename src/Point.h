@@ -7,6 +7,7 @@
 
 class Point {
 public:
+    Point() {};
     Point(double lon, double lat) : m_fLon(lon), m_fLat(lat), m_nID(-1) {};
 
     bool operator==(Point &point);

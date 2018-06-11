@@ -5,7 +5,10 @@
 
 #ifndef TRAFFIC_NETWORK_MODEL_FUNC_H
 #define TRAFFIC_NETWORK_MODEL_FUNC_H
-
+typedef struct {
+    string strPath;
+    int num = 0;
+} RoutePath;
 /**
  * To parse the map
  * @param G the reference of Graph
@@ -24,8 +27,7 @@ void calcShortestPath(Graph *G);
  * @param str String to be added
  * @param i The integer to add
  */
-void StringAddInt(string &str, int i);
-
+void RoutePathAddInt(RoutePath &routePath, int i);
 
 /**
  * add road to traffic-network

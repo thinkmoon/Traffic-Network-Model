@@ -14,11 +14,9 @@ void addRoad(Graph &Map_Graph, Point A, Point B, double length) {
     for (int i = 0; i < point_num; i++) {
         if (Map_Graph.point[i] == A) {
             site_A = i;
-            break;
         }
         if (Map_Graph.point[i] == B) {
             site_B = i;
-            break;
         }
     }
     if (site_A == -1) {
@@ -57,10 +55,11 @@ void generateTestGraph(Graph &G) {
     addRoad(G, v1, v6, 100);
 }
 
-void StringAddInt(string &str, int i) {
+void RoutePathAddInt(RoutePath &routePath, int i) {
     stringstream stream;
     stream << i << " ";
-    str = str + stream.str();
+    routePath.strPath = routePath.strPath + stream.str();
+    routePath.num++;
 }
 
 void calcShortestPath(Graph *G) {
@@ -100,15 +99,15 @@ void calcShortestPath(Graph *G) {
         }
         for (auto path:v_nPointPath) {
             if (!path.empty() && path.size() < G->point.size()) {
-                string strRoutePath;
+                RoutePath routePath;
                 for (int nRoadNum = 0; nRoadNum < path.size() - 1; nRoadNum++) {
                     int nRoadID = G->getRoadID(path[nRoadNum], path[nRoadNum + 1]);
                     if (nRoadID != -1) {
-                        StringAddInt(strRoutePath, nRoadID);
+                        RoutePathAddInt(routePath, nRoadID);
                     }
                 }
-                if (!strRoutePath.empty())
-                    out << strRoutePath << endl;
+                if (routePath.num > 1)
+                    out << routePath.strPath << endl;
             }
         }
     }

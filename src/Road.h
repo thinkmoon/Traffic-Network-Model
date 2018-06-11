@@ -16,8 +16,12 @@ class Road {
 public:
     Road(Point CPoint_from, Point CPoint_to, double dLength) : m_CPoint_from(CPoint_from), m_CPoint_to(CPoint_from),
                                                                m_dLength(dLength) {};
-    int get_Congeestion();
 
+    /**
+     * 获取拥挤度
+     * @return 返回拥挤值
+     */
+    int get_Congestion();
 public:
     double m_dLength;
     Point m_CPoint_from, m_CPoint_to;

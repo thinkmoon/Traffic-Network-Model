@@ -3,7 +3,7 @@
 //
 #include "Road.h"
 
-int Road::get_Congeestion() {
+int Road::get_Congestion() {
     m_nCongestion = 50 * m_queVehicle.size() / m_dLength;
     return m_nCongestion;
 }

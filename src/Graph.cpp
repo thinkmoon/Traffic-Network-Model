@@ -2,7 +2,6 @@
 // Created by chauncey on 18-3-6.
 //
 #include "Graph.h"
-
 void Graph::showPoint() {
     cout << "show point:";
     cout << endl << "------------+ Point +-------------" << endl;
@@ -17,7 +16,7 @@ void Graph::showRoadTable(int num) {
     int count = 0;
     cout << endl << "-------------+ RoadTable +------------" << endl;
     for (auto item:RoadTable) {
-        if (item.length >= num || num == -1) {
+        if (item.length == 4 || num == -1) {
             cout << "Point[" << item.junctionID << "]," << "num:" << item.length;
             RoadNode *p = item.link;
             cout << " link:";
@@ -44,7 +43,7 @@ void Graph::showRoad() {
 void Graph::show() {
     showPoint();
     showRoad();
-    showRoadTable(-1);
+    showRoadTable(2);
 }
 
 int Graph::getRoadID(int PointFromID,int PointToID) {
@@ -73,3 +72,4 @@ void RoadNode::addNode(int m_ID, double m_length, int roadID) {
     }
     length++;
 }
+
