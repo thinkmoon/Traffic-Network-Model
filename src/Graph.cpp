@@ -58,8 +58,8 @@ int Graph::getRoadID(int PointFromID,int PointToID) {
     return n_RoadID;
 }
 
-void RoadNode::addNode(int m_ID, double m_length, int roadID) {
-    auto node = new RoadNode(m_ID, m_length, roadID);
+void RoadNode::addNode(int m_ID, double m_length, int roadID, int ParallelRoadID) {
+    auto node = new RoadNode(m_ID, m_length, roadID, ParallelRoadID);
     if (link == nullptr) {
         link = node;
     } else {

@@ -5,20 +5,23 @@
 #define TRAFFIC_NETWORK_MODEL_GRAPH_H
 
 #include "stdafx.h"
+#include "TrafficLight.h"
 #include "Road.h"
 #include "Point.h"
-#include "TrafficLight.h"
 
 /**
  *  The road node
  */
 class RoadNode {
 public:
-    RoadNode(int junctionID, double length, int roadID) : junctionID(junctionID), length(length), roadID(roadID),
-                                                          link(nullptr) {};
-    void addNode(int m_ID, double m_length, int roadID);
+    RoadNode(int junctionID, double length, int roadID, int ParallelRoadID) : junctionID(junctionID), length(length),
+                                                                              roadID(roadID),
+                                                                              ParallelRoadID(ParallelRoadID),
+                                                                              link(nullptr) {};
+
+    void addNode(int m_ID, double m_length, int roadID, int ParrallelRoadID);
 public:
-    int junctionID, roadID;
+    int junctionID, roadID, ParallelRoadID;
     double length;
     RoadNode *link;
     TrafficLight m_CTrafficLight_Light;

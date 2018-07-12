@@ -23,7 +23,7 @@ void addRoad(Graph &Map_Graph, Point A, Point B, double length) {
         Map_Graph.point.push_back(A);
         site_A = point_num++;
         Map_Graph.point[site_A].m_nID = site_A;
-        RoadNode node(site_A, 0, roadID);
+        RoadNode node(site_A, 0, roadID, (roadID + 1));
         Map_Graph.RoadTable.push_back(node);
         Map_Graph.RoadTable[site_A].junctionID = site_A;
     }
@@ -31,16 +31,18 @@ void addRoad(Graph &Map_Graph, Point A, Point B, double length) {
         Map_Graph.point.push_back(B);
         site_B = point_num;
         Map_Graph.point[site_B].m_nID = site_B;
-        RoadNode node(site_B, 0, roadID);
+        RoadNode node(site_B, 0, (roadID + 1), roadID);
         Map_Graph.RoadTable.push_back(node);
         Map_Graph.RoadTable[site_B].junctionID = site_B;
     }
-    Map_Graph.RoadTable[site_A].addNode(site_B, length, roadID);
-    Map_Graph.RoadTable[site_B].addNode(site_A, -length, roadID);
+    Map_Graph.RoadTable[site_A].addNode(site_B, length, roadID, (roadID + 1));
+    Map_Graph.RoadTable[site_B].addNode(site_A, -length, (roadID + 1), roadID);
     A.m_nID = site_A;
     B.m_nID = site_B;
-    Road m_road(A, B, length);
-    Map_Graph.road.push_back(m_road);
+    Road m_roadA(A, B, length, roadID, (roadID + 1));
+    Road m_roadB(B, A, length, (roadID + 1), roadID);
+    Map_Graph.road.push_back(m_roadA);
+    Map_Graph.road.push_back(m_roadB);
 }
 
 void generateTestGraph(Graph &G) {

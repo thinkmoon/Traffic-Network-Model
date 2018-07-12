@@ -14,8 +14,12 @@
  */
 class Road {
 public:
-    Road(Point CPoint_from, Point CPoint_to, double dLength) : m_CPoint_from(CPoint_from), m_CPoint_to(CPoint_from),
-                                                               m_dLength(dLength) {};
+    Road(Point CPoint_from, Point CPoint_to, double dLength, int roadID, int ParallelRoadID) : m_CPoint_from(
+            CPoint_from), m_CPoint_to(CPoint_from),
+                                                                                               m_dLength(dLength),
+                                                                                               roadID(roadID),
+                                                                                               ParallelRoadID(
+                                                                                                       ParallelRoadID) {};
 
     /**
      * 获取拥挤度
@@ -23,6 +27,7 @@ public:
      */
     int get_Congestion();
 public:
+    int roadID, ParallelRoadID, m_nTrafficLightSite;
     double m_dLength;
     Point m_CPoint_from, m_CPoint_to;
     int m_nCongestion; //(50 * car / length),[0,100] 拥挤度

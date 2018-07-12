@@ -23,9 +23,11 @@ void TrafficLight::setAllGreen() {
 void TrafficLight::changeStatus() {
     switch (type) {
         case 0:
-            return 0;
+            setAllGreen();
+            break;
         case 1:
-            return 0;
+            setAllGreen();
+            break;
         case 2:
             setAllGreen();
             break;
@@ -69,4 +71,24 @@ void TrafficLight::changeStatus() {
             }
     }
 
+}
+
+void TrafficLight::clock(int time) {
+    emStatus = time / 3 % 7 + 1;
+    changeStatus();
+}
+
+bool TrafficLight::getStatus(int from, int to) {
+    cout << " from " << from << "to " << to << endl;
+    int from_site, to_site;
+    for (int i = 0; i < 8; i++) {
+        if (from == roadID[i]) {
+            from_site = i;
+        } else if (to == roadID[i]) {
+            to_site == i;
+        }
+        cout << " " << roadID[i];
+    }
+    cout << "fromsite:" << from_site << " to_site" << to_site << endl;
+    return status[from_site][to_site];
 }

@@ -9,7 +9,9 @@
 
 class Vehicle {
 public:
-    Vehicle(int nID,queue<int> route, float spec, double distance) : m_nID(nID),fSpec(spec), dDistance(distance) {
+    Vehicle(int nID, queue<int> route, float spec, double distance, int SiteRoadID) : m_nID(nID), fSpec(spec),
+                                                                                      dDistance(distance),
+                                                                                      m_nSiteRoadID(SiteRoadID) {
         this->queRoute = route;
     };
 
@@ -26,7 +28,7 @@ public:
             if (r.empty())
                 return;
             cout << " To :" << r.back() ;
-            cout << " it's site is :" << queRoute.front() << " distance:" << dDistance;
+            cout << " it's site is :" << m_nSiteRoadID << " distance:" << dDistance;
             cout <<  " route:";
             while (!r.empty()) {
                 cout << r.front() << " ";
@@ -38,7 +40,7 @@ public:
 
 public:
     long long int time=0;
-    int m_nID;
+    int m_nID, m_nSiteRoadID;
     double dDistance;
     float fSpec; //spec = ( 100 - congestion ) + ( 10 - rand(0,20))
     queue<int> queRoute;
