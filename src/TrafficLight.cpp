@@ -79,8 +79,8 @@ void TrafficLight::clock(int time) {
 }
 
 bool TrafficLight::getStatus(int from, int to) {
-    cout << " from " << from << "to " << to << endl;
-    int from_site, to_site;
+    cout << BLUE << "准备从" << from << "号路转向" << to <<"号路"<< endl;
+    int from_site=-1, to_site=-1;
     for (int i = 0; i < 8; i++) {
         if (from == roadID[i]) {
             from_site = i;
@@ -89,6 +89,10 @@ bool TrafficLight::getStatus(int from, int to) {
         }
         cout << " " << roadID[i];
     }
-    cout << "fromsite:" << from_site << " to_site" << to_site << endl;
+    cout << endl;
+    if(from_site == -1 || to_site == -1){
+        cout << RED << "TrafficLight::getStatus判断异常" << endl << "未找到对应的交通灯,程序出错被迫终止" << endl;
+        exit(1);
+    }
     return status[from_site][to_site];
 }

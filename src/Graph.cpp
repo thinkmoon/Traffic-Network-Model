@@ -16,7 +16,6 @@ void Graph::showRoadTable(int num) {
     int count = 0;
     cout << endl << "-------------+ RoadTable +------------" << endl;
     for (auto item:RoadTable) {
-        if (item.length == 4 || num == -1) {
             cout << "Point[" << item.junctionID << "]," << "num:" << item.length;
             RoadNode *p = item.link;
             cout << " link:";
@@ -26,7 +25,6 @@ void Graph::showRoadTable(int num) {
             }
             cout << endl;
             count++;
-        }
     }
     cout << endl << "-----------------------------------" << endl;
     cout << "there are " << count << " point" << endl;

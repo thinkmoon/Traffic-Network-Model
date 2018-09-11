@@ -17,6 +17,7 @@ public:
 
     void showself() {
         //ofstream out(DIR_RES"vehicle.txt");
+        cout << BLACK ;
         if (queRoute.empty()) {
             cout << "it[" << m_nID << "] is return" ;
             cout << "distance have " << dDistance << "m" << endl;

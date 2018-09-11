@@ -88,7 +88,7 @@ void runSimulation(Graph &G) {
                         } else {
                             //将距离置为道路长度，表示正在等候红灯
                             it.dDistance = G.road[it.m_nSiteRoadID].m_dLength;
-                            cout << " 等待红灯";
+                            cout << YELLOW << "等待红灯" << endl;
                             //车辆塞回去
                             obj.push_back(it);
                         }
@@ -226,23 +226,17 @@ void initTraffic_Light(Graph &G) {
 int main() {
     Graph Map_Graph;
     parseMap(Map_Graph, DIR_RES"map.xml");
-//    generateTestGraph(&Map_Graph);
     //Map_Graph.show();
-    cout << "Parse succeed" << endl;
+    cout << BLACK << "Parse succeed" << endl;
     initTraffic_Light(Map_Graph);
     loadRoute(Map_Graph);
     generateVehicle(Map_Graph);
-    cout << Map_Graph.road[0].m_nTrafficLightSite;
-    for (int i = 0; i < 8; i++) {
-        cout << " " << Map_Graph.RoadTable[2].m_CTrafficLight_Light.roadID[i];
+    int time = 10;
+    while (time--) {
+        cout << GREEN << "[TIME]:" << SYSTEM_TIME++ << "0s" << endl;
+        runSimulation(Map_Graph);
     }
-    //calcShortestPath(&Map_Graph);
-    int time = 0;
-//    while (true) {
-//        cout << "现在是" << SYSTEM_TIME++ << "0s " << endl;
-//        runSimulation(Map_Graph);
-//    }
-    cout << endl << "end" << endl;
+    cout << BLACK << endl << "end" << endl;
     return 0;
 }
 
