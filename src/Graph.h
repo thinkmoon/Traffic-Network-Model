@@ -7,44 +7,20 @@
 #include "stdafx.h"
 #include "TrafficLight.h"
 #include "Road.h"
-#include "Point.h"
-
-/**
- *  The road node
- */
-class RoadNode {
-public:
-    RoadNode(int junctionID, double length, int roadID, int ParallelRoadID) : junctionID(junctionID), length(length),
-                                                                              roadID(roadID),
-                                                                              ParallelRoadID(ParallelRoadID),
-                                                                              link(nullptr) {};
-
-    void addNode(int m_ID, double m_length, int roadID, int ParrallelRoadID);
-public:
-    int junctionID, roadID, ParallelRoadID;
-    double length;
-    RoadNode *link;
-    TrafficLight m_CTrafficLight_Light;
-};
 
 /**
  * the traffic Graph
  */
 class Graph {
 public:
-    vector<Road> road;
-    vector<Point> point;
-    vector<RoadNode> RoadTable;
+    void output();
+public:
+    // 道路容器
+    vector<Road> m_Road_v;
+    // 路口容器
+    vector<CrossRoad> m_CrossRoad_v;
 
-    void show();
-    void showPoint();
-    void showRoad();
-    /**
-     * show the traffic network table
-     * @param num  Out of degree's num
-     */
-    void showRoadTable(int num);
-    int getRoadID(int PointFromID, int PointToID);
+//    int getRoadID(int PointFromID, int PointToID);
 };
 
 #endif //TRAFFIC_NETWORK_MODEL_GRAPH_H

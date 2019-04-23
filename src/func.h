@@ -3,6 +3,7 @@
 //
 #include "Graph.h"
 
+
 #ifndef TRAFFIC_NETWORK_MODEL_FUNC_H
 #define TRAFFIC_NETWORK_MODEL_FUNC_H
 typedef struct {
@@ -10,9 +11,9 @@ typedef struct {
     int num = 0;
 } RoutePath;
 /**
- * To parse the map
- * @param G the reference of Graph
- * @param MapFileName
+ * 解析地图
+ * @param G 图类的引用
+ * @param MapFileName 地图的文件地址
  */
 void parseMap(Graph &Map_Graph, const char *MapFileName);
 
@@ -28,15 +29,6 @@ void calcShortestPath(Graph *G);
  * @param i The integer to add
  */
 void RoutePathAddInt(RoutePath &routePath, int i);
-
-/**
- * add road to traffic-network
- * @param G the reference of Graph
- * @param A  point A
- * @param B point B
- * @param length the road's length
- */
-void addRoad(Graph &Map_Graph, Point A, Point B, double length);
 
 /**
  * generate a test graph

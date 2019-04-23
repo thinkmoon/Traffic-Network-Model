@@ -1,5 +1,6 @@
 #pragma once
 #define DIR_RES "./../res/"
+#define DIR_DATA "./../data/"
 #define BLUE    "\033[34m"      /* Blue */
 #define RED     "\033[31m"      /* Red */
 #define GREEN   "\033[32m"      /* Green */
@@ -12,6 +13,7 @@
 #include <vector>
 #include <queue>
 #include <cmath>
+#include <ctime>
 #include <cfloat>
 #include <sstream>
 #include <random>
