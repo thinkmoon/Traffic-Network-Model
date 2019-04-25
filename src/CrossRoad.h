@@ -11,11 +11,9 @@
 //一条方向道路节点
 class Node{
 public:
-    Node(int outRoad,int inRoad,double atan2) : outRoadID(outRoad),inRoadID(inRoad),atan2(atan2){};
+    Node(int outRoad,int inRoad) : outRoadID(outRoad),inRoadID(inRoad){};
     int outRoadID;
     int inRoadID;
-    //该点与方向道路的atan2值
-    double atan2;
 };
 /**
 *  路口类，记录着该路口的点坐标，以及其相连的方向道路节点组
@@ -49,9 +47,8 @@ public:
      * 添加方向道路节点组
      * @param outRoadID 出度道路ID,对应注释图中的2号路
      * @param inRoadID 入度道路ID,对应注释图中的1号路
-     * @param atan2 该路口与方向道路的atan2值
      */
-    void addNode(int outRoadID,int inRoadID,double atan2);
+    void addNode(int outRoadID,int inRoadID);
 public:
     //唯一标示符
     int m_nID;

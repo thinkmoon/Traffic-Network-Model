@@ -7,7 +7,7 @@
 void TrafficLight::setAllRed() {
     for (int i = 0; i < 8; i++) {
         for (int j = 0; j < 8; j++) {
-            status[i][j] = false;
+            status[i][j] = 0;
         }
     }
 }
@@ -15,105 +15,61 @@ void TrafficLight::setAllRed() {
 void TrafficLight::setAllGreen() {
     for (int i = 0; i < 8; i++) {
         for (int j = 0; j < 8; j++) {
-            status[i][j] = true;
+            status[i][j] = 1;
         }
     }
 }
 
 void TrafficLight::changeStatus() {
     switch (type) {
-        case 0:
-            setAllGreen();
-            break;
-        case 1:
-            setAllGreen();
-            break;
-        case 2:
-            setAllGreen();
-            break;
         case 3:
-            if (emStatus % 4 == 0) {
-                status[0][5]=status[4][1]=1;
-                status[2][5]=status[0][3]=0;
-            } else if (emStatus % 4 == 1) {
-                status[0][5]=status[0][3]=1;
-                status[4][1]=status[2][5]=0;
-            } else {
-                status[0][5]=status[2][5]=1;
-                status[4][1]=status[0][3]=0;
+            this->setType(3);
+            if(emStatus % 3 == 0){
+                status[0][5] = 1;
+            }else if(emStatus % 3 == 1){
+                status[4][7] = 1;
+            }else{
+                status[6][1] = 1;
             }
             break;
         case 4:
+            this->setType(4);
             switch (emStatus) {
                 case 1:
+//                    平衡左右
                     status[0][5]=status[4][1]=1;
-                    status[6][3]=status[2][7]=0;
-                    status[0][3]=status[2][5]=0;
-                    status[6][1]=status[4][7]=0;
                     break;
                 case 2:
-                    status[0][5]=status[4][1]=0;
+//                    平衡上下
                     status[6][3]=status[2][7]=1;
-                    status[0][3]=status[2][5]=0;
-                    status[6][1]=status[4][7]=0;
                     break;
                 case 3:
-                    status[0][5]=status[4][1]=0;
-                    status[6][3]=status[2][7]=0;
-                    status[0][3]=status[2][5]=1;
-                    status[6][1]=status[4][7]=0;
+                    status[0][3]=status[4][7]=1;
                     break;
                 case 4:
-                    status[0][5]=status[4][1]=0;
-                    status[6][3]=status[2][7]=0;
-                    status[0][3]=status[2][5]=0;
-                    status[6][1]=status[4][7]=1;
+                    status[6][1]=status[2][5]=1;
                 case 5:
                     status[6][1]=status[4][1]=1;
-                    status[6][3]=status[0][3]=0;
-                    status[0][5]=status[2][5]=0;
-                    status[2][7]=status[4][7]=0;
                     break;
                 case 6:
-                    status[6][1]=status[4][1]=0;
                     status[6][3]=status[0][3]=1;
-                    status[0][5]=status[2][5]=0;
-                    status[2][7]=status[4][7]=0;
                     break;
                 case 7:
-                    status[6][1]=status[4][1]=0;
-                    status[6][3]=status[0][3]=0;
                     status[0][5]=status[2][5]=1;
-                    status[2][7]=status[4][7]=0;
                     break;
                 case 8:
-                    status[6][1]=status[4][1]=0;
-                    status[6][3]=status[0][3]=0;
-                    status[0][5]=status[2][5]=0;
                     status[2][7]=status[4][7]=1;
                     break;
                 case 9:
                     status[6][1]=status[6][3]=1;
-                    status[0][5]=status[0][3]=0;
-                    status[2][7]=status[2][5]=0;
-                    status[4][1]=status[4][7]=0;
                     break;
                 case 10:
-                    status[6][1]=status[6][3]=0;
                     status[0][5]=status[0][3]=1;
-                    status[2][7]=status[2][5]=0;
-                    status[4][1]=status[4][7]=0;
                     break;
                 case 11:
-                    status[6][1]=status[6][3]=0;
-                    status[0][5]=status[0][3]=0;
                     status[2][7]=status[2][5]=1;
-                    status[4][1]=status[4][7]=0;
                     break;
                 case 12:
-                    status[6][1]=status[6][3]=0;
-                    status[0][5]=status[0][3]=0;
-                    status[2][7]=status[2][5]=0;
                     status[4][1]=status[4][7]=1;
                     break;
             }
@@ -141,34 +97,49 @@ bool TrafficLight::getStatus(int from, int to) {
         } else if (to == roadID[i]) {
             to_site = i;
         }
+        if(i % 2 == 0 && roadID[i] == roadID[i+1] && roadID[i] != 0){
+            cout << roadID[i] << " " << roadID[i+1 ] << endl;
+            exit(1);
+        }
     }
     if(from_site == -1 || to_site == -1){
         cout << RED << "TrafficLight::getStatus判断异常" << endl << "未找到对应的交通灯,程序出错被迫终止" << endl;
         cout << BLUE << from << " -> " << to << endl;
+        for (int i = 0; i < 8; i++) {
+            cout << roadID[i] << "-";
+        }
+        cout << endl;
         exit(1);
     }
     if(status[from_site][to_site] == 1){
         return true;
-    }else if(status[from_site][to_site] == 0){
+    }else if(from_site % 2 == to_site % 2){
         cout << RED << "从" << from_site << "方向转至" << to_site << "方向,通行状态" << status[from_site][to_site] << endl;
-        return false;
+        cout << "出现不存在的状态" << endl;
+        exit(1);
     }else{
         cout << RED << "从" << from_site << "方向转至" << to_site << "方向,通行状态" << status[from_site][to_site] << endl;
-        throw "禁止通行!遇到不可通行状态";
+        return false;
+    }
+}
+void TrafficLight::setType(int type) {
+    this->type = type;
+    for (int i = 0; i < 8; i++) {
+        for (int j = 0; j < 8; j++) {
+            status[i][j] = -1;
+        }
+    }
+    switch (type) {
+        case 2:
+            status[0][5] = status[4][1] = 1;
+        case 3:
+            status[0][7] = status[0][1] = status[4][1] = status[4][5] = status[6][7] = status[6][5] = 1;
+            break;
+        case 4:
+            status[0][7] = status[0][1] = status[2][1] = status[2][3] = status[4][3] = status[4][5] = status[6][5] = status[6][7] = 1;
+            break;
     }
 }
 TrafficLight::TrafficLight() {
-    status[2][1] = status[4][3] = status[6][5] = status[0][7] = 1;
-    for(int i = 0; i < 8 ; i++){
-        // 初始化road
-        roadID[i] = -1;
-        // 出口不能进去
-        status[1][i] = status[3][i] = status[5][i] = status[7][i] = -1;
-        if(i%2 == 0){
-            // 不能自转和变道
-            status[0][i] = status[2][i] = status[4][i] = status[6][i] = -1;
-            // 同向转道不受交通灯的控制
-            status[i][i+1] = 1;
-        }
-    }
+
 }

@@ -28,9 +28,8 @@ public:
      * 设置灯的类型, 是T字路口还是+字路口
      * @param type
      */
-    void setType(int type) { this->type = type; };
+    void setType(int type);
     //路口标号
-    // nLeftIn,nLeftOut,nDownIn,nDownOut,nRightIn,nRightOut,nUpIn,nUpOut;
     int roadID[8];
     //路口是否能走通
     int status[8][8] = {0};

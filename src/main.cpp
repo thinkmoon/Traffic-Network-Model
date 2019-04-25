@@ -2,7 +2,7 @@
 #include "func.h"
 
 long long int SYSTEM_TIME = 0;
-int VehicleNum = 10000;
+int VehicleNum = 1000;
 int endVehicleNum = 0;
 vector<queue<int>> v_Route;
 
@@ -28,13 +28,18 @@ void loadRoute(Graph &Map_graph) {
  * @param G
  */
 void generateVehicle(Graph &G) {
-    std::random_device rd;
-    std::mt19937 mt(rd());
-    for (int n_VehicleNum = 0; n_VehicleNum < VehicleNum; ++n_VehicleNum) {
-        auto route = v_Route[mt() % v_Route.size()];
-        Vehicle car(n_VehicleNum, route, 0, 0, route.front());
+//    std::random_device rd;
+//    std::mt19937 mt(rd());
+//    for (int n_VehicleNum = 0; n_VehicleNum < VehicleNum; ++n_VehicleNum) {
+//        auto route = v_Route[mt() % v_Route.size()];
+//        Vehicle car(n_VehicleNum, route, 0, 0, route.front());
+//        G.m_Road_v[route.front()].m_queVehicle.push_back(car);
+//        this_thread::sleep_for(chrono::milliseconds(1));
+//    }
+    for (int i = 0; i < v_Route.size(); ++i) {
+        auto route = v_Route[i];
+        Vehicle car(i,route,0,0,route.front());
         G.m_Road_v[route.front()].m_queVehicle.push_back(car);
-        this_thread::sleep_for(chrono::milliseconds(1));
     }
 }
 
@@ -88,9 +93,13 @@ void runSimulation(Graph &G) {
                         //判断红绿灯情况
                         G.m_CrossRoad_v[G.m_Road_v[site].m_CrossRoadToSite].m_CTrafficLight_Light.clock(SYSTEM_TIME);
                         //如果可以通行
+                        printf(BLUE"路口ID:%d,打算从%d号路转至%d\n,路口数%d",G.m_Road_v[site].m_CrossRoadToSite,it.m_nSiteRoadID,next,G.m_CrossRoad_v[G.m_Road_v[site].m_CrossRoadToSite].JunctionRoad.size());
                         try {
                             if (G.m_CrossRoad_v[G.m_Road_v[site].m_CrossRoadToSite].m_CTrafficLight_Light.getStatus(
                                     it.m_nSiteRoadID, next)) {
+                                if(it.dDistance == G.m_Road_v[it.m_nSiteRoadID].m_dLength){
+                                    G.m_CrossRoad_v[G.m_Road_v[site].m_CrossRoadToSite].m_CTrafficLight_Light.subWait(it.m_nSiteRoadID,next);
+                                }
                                 it.queRoute = route;
                                 it.dDistance = 0;
                                 it.m_nSiteRoadID = next;
@@ -98,7 +107,7 @@ void runSimulation(Graph &G) {
                                 site_road->push_back(it);
                                 //如果不能通行
                             } else {
-                                printf(BLUE"路口ID:%d,打算从%d号路转至%d\n",G.m_CrossRoad_v[G.m_Road_v[site].m_CrossRoadToSite].m_nID,it.m_nSiteRoadID,next);
+                                G.m_CrossRoad_v[G.m_Road_v[site].m_CrossRoadToSite].m_CTrafficLight_Light.addWait(it.m_nSiteRoadID,next);
                                 //将距离置为道路长度，表示正在等候红灯
                                 it.dDistance = G.m_Road_v[it.m_nSiteRoadID].m_dLength;
                                 //车辆塞回去
@@ -126,87 +135,40 @@ void runSimulation(Graph &G) {
     }
     }
 
-//class PointPositon {
-//public:
-//    int RoadID, site;
-//    float tan;
-//    Point P;
-//
-//    bool operator<(PointPositon m) const {
-//        if (site != m.site) {
-//            return site < m.site;
-//        } else {
-//            return tan < m.tan;
-//        }
-//    }
-//
-//};
-//
-//int computeSite(Point origin, Point aim, float &tan) {
-//    int site;
-//    float x = aim.m_fLat - origin.m_fLat;
-//    float y = aim.m_fLon - origin.m_fLon;
-//    //计算坐标系
-//    if (x >= 0 && y >= 0) {
-//        site = 0;
-//    } else if (x <= 0 && y >= 0) {
-//        site = 1;
-//    } else if (x >= 0 && y <= 0) {
-//        site = 2;
-//    } else if (x <= 0 && y <= 0) {
-//        site = 3;
-//    }
-//    //计算sinx的值
-//    if (y == 0.0) {
-////
-//        tan = FLT_MAX;
-//    } else {
-//        tan = x / y;
-//    }
-//
-//}
-/**
- * 将原先无方向的道路连接方向化，使我们可以知道左转是去哪条路
- * @param G
- * @param origin
- * @param res
- * @return
- */
-//vector<int> computePosition(Graph &G, CrossRoad origin, RoadNode *res) {
-//    vector<int> RoadPosition;
-//    vector<PointPositon> PP;
-//    while (res) {
-//        PointPositon temp;
-//        temp.P = G.point[res->m_ID];
-//        temp.RoadID = res->roadID;
-//        temp.site = computeSite(origin, temp.P, temp.tan);
-//        PP.push_back(temp);
-//        res = res->link;
-//    }
-//    sort(PP.begin(), PP.end());
-//    for (auto x: PP) {
-//        RoadPosition.push_back(x.RoadID);
-//    }
-//    return RoadPosition;
-//}
-//
 void initTraffic_Light(Graph &G) {
     for (auto it = G.m_CrossRoad_v.begin(); it != G.m_CrossRoad_v.end(); it++) {
         it->m_CTrafficLight_Light.setType(it->JunctionRoad.size());
         {
-            it->m_CTrafficLight_Light.roadID[4] = it->JunctionRoad[0].inRoadID;
-            it->m_CTrafficLight_Light.roadID[5] = it->JunctionRoad[0].outRoadID;
+            if(it->JunctionRoad.size() == 1){
+                it->m_CTrafficLight_Light.roadID[5] = it->JunctionRoad[0].outRoadID;
+                it->m_CTrafficLight_Light.roadID[4] = it->JunctionRoad[0].inRoadID;
+            }else if(it->JunctionRoad.size() == 2){
+                it->m_CTrafficLight_Light.roadID[5] = it->JunctionRoad[0].outRoadID;
+                it->m_CTrafficLight_Light.roadID[4] = it->JunctionRoad[0].inRoadID;
 
-            it->m_CTrafficLight_Light.roadID[0] = it->JunctionRoad[1].inRoadID;
-            it->m_CTrafficLight_Light.roadID[1] = it->JunctionRoad[1].outRoadID;
-            switch (it->JunctionRoad.size()) {
-                case 4:
-                    it->m_CTrafficLight_Light.roadID[6] = it->JunctionRoad[3].inRoadID;
-                    it->m_CTrafficLight_Light.roadID[7] = it->JunctionRoad[3].outRoadID;
-                    //你是不是想说没有break？这里不需要break；
-                case 3:
-                    it->m_CTrafficLight_Light.roadID[2] = it->JunctionRoad[2].inRoadID;
-                    it->m_CTrafficLight_Light.roadID[3] = it->JunctionRoad[2].outRoadID;
+                it->m_CTrafficLight_Light.roadID[0] = it->JunctionRoad[1].inRoadID;
+                it->m_CTrafficLight_Light.roadID[1] = it->JunctionRoad[1].outRoadID;
+            }else if(it->JunctionRoad.size() == 3){
+                it->m_CTrafficLight_Light.roadID[5] = it->JunctionRoad[0].outRoadID;
+                it->m_CTrafficLight_Light.roadID[4] = it->JunctionRoad[0].inRoadID;
+
+                it->m_CTrafficLight_Light.roadID[0] = it->JunctionRoad[1].inRoadID;
+                it->m_CTrafficLight_Light.roadID[1] = it->JunctionRoad[1].outRoadID;
+
+                it->m_CTrafficLight_Light.roadID[6] = it->JunctionRoad[2].inRoadID;
+                it->m_CTrafficLight_Light.roadID[7] = it->JunctionRoad[2].outRoadID;
+            }else if(it->JunctionRoad.size() == 4){
+                it->m_CTrafficLight_Light.roadID[5] = it->JunctionRoad[0].outRoadID;
+                it->m_CTrafficLight_Light.roadID[4] = it->JunctionRoad[0].inRoadID;
+
+                it->m_CTrafficLight_Light.roadID[0] = it->JunctionRoad[1].inRoadID;
+                it->m_CTrafficLight_Light.roadID[1] = it->JunctionRoad[1].outRoadID;
+
+                it->m_CTrafficLight_Light.roadID[6] = it->JunctionRoad[2].inRoadID;
+                it->m_CTrafficLight_Light.roadID[7] = it->JunctionRoad[2].outRoadID;
+
+                it->m_CTrafficLight_Light.roadID[2] = it->JunctionRoad[3].inRoadID;
+                it->m_CTrafficLight_Light.roadID[3] = it->JunctionRoad[3].outRoadID;
             }
         }
 
@@ -216,9 +178,9 @@ void initTraffic_Light(Graph &G) {
 int main() {
     Graph Map_Graph;
     parseMap(Map_Graph, DIR_RES"map.xml");
-    Map_Graph.output();
+    // Map_Graph.output();
     cout << BLACK << "Parse succeed" << endl;
-    //calcShortestPath(&Map_Graph);
+    // calcShortestPath(&Map_Graph);
     initTraffic_Light(Map_Graph);
     loadRoute(Map_Graph);
     generateVehicle(Map_Graph);

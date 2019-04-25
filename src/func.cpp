@@ -21,12 +21,12 @@ void addRoad(Graph &Map_Graph, CrossRoad A, CrossRoad B, double length) {
     //如果不存在与A点重合的路口,添加路口，保存路口索引
     if (CrossRoadSiteA == -1) {
         Map_Graph.m_CrossRoad_v.push_back(A);
-        CrossRoadSiteA = CrossRoadNum++;
+        CrossRoadSiteA = Map_Graph.m_CrossRoad_v.size() - 1;
         Map_Graph.m_CrossRoad_v[CrossRoadSiteA].m_nID = CrossRoadSiteA;
     }
     if (CrossRoadSiteB == -1) {
         Map_Graph.m_CrossRoad_v.push_back(B);
-        CrossRoadSiteB = CrossRoadNum++;
+        CrossRoadSiteB = Map_Graph.m_CrossRoad_v.size() - 1;
         Map_Graph.m_CrossRoad_v[CrossRoadSiteB].m_nID = CrossRoadSiteB;
     }
     int RoadSiteA = RoadNum, RoadSiteB = RoadNum + 1;
@@ -36,9 +36,8 @@ void addRoad(Graph &Map_Graph, CrossRoad A, CrossRoad B, double length) {
     Road roadB(RoadSiteB, CrossRoadSiteB, CrossRoadSiteA, length);
     Map_Graph.m_Road_v.push_back(roadB);
     // 对接A，B路口节点数据
-    Map_Graph.m_CrossRoad_v[CrossRoadSiteA].addNode(RoadSiteA, RoadSiteB,
-                                                    atan2((B.m_fLat - A.m_fLat), (B.m_fLon - A.m_fLon)));
-    Map_Graph.m_CrossRoad_v[CrossRoadSiteB].addNode(RoadSiteB, RoadSiteA,atan2((A.m_fLat - B.m_fLat), (A.m_fLon - B.m_fLon)));
+    Map_Graph.m_CrossRoad_v[CrossRoadSiteA].addNode(RoadSiteA, RoadSiteB);
+    Map_Graph.m_CrossRoad_v[CrossRoadSiteB].addNode(RoadSiteB, RoadSiteA);
 }
 
 void RoutePathAddInt(RoutePath &routePath, int i) {
