@@ -24,7 +24,7 @@ void TrafficLight::changeStatus() {
     switch (type) {
         case 3:
             this->setType(3);
-            if(emStatus % 3 == 0){
+            if(emStatus == 0){
                 status[0][5] = 1;
             }else if(emStatus % 3 == 1){
                 status[4][7] = 1;
@@ -78,7 +78,13 @@ void TrafficLight::changeStatus() {
 }
 
 void TrafficLight::clock(int time) {
-    emStatus = time % 12 +1;
+    switch (this->type) {
+        case 3:
+        if(wait[0][5] >= wait[4][7] >= wait[6][1]){
+
+        }
+            break;
+    }
     changeStatus();
 }
 void TrafficLight::addWait(int from, int to) {

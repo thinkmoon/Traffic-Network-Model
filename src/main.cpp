@@ -28,19 +28,19 @@ void loadRoute(Graph &Map_graph) {
  * @param G
  */
 void generateVehicle(Graph &G) {
-//    std::random_device rd;
-//    std::mt19937 mt(rd());
-//    for (int n_VehicleNum = 0; n_VehicleNum < VehicleNum; ++n_VehicleNum) {
-//        auto route = v_Route[mt() % v_Route.size()];
-//        Vehicle car(n_VehicleNum, route, 0, 0, route.front());
-//        G.m_Road_v[route.front()].m_queVehicle.push_back(car);
-//        this_thread::sleep_for(chrono::milliseconds(1));
-//    }
-    for (int i = 0; i < v_Route.size(); ++i) {
-        auto route = v_Route[i];
-        Vehicle car(i,route,0,0,route.front());
+    std::random_device rd;
+    std::mt19937 mt(rd());
+    for (int n_VehicleNum = 0; n_VehicleNum < VehicleNum; ++n_VehicleNum) {
+        auto route = v_Route[mt() % v_Route.size()];
+        Vehicle car(n_VehicleNum, route, 0, 0, route.front());
         G.m_Road_v[route.front()].m_queVehicle.push_back(car);
+        this_thread::sleep_for(chrono::milliseconds(1));
     }
+//    for (int i = 0; i < v_Route.size(); ++i) {
+//        auto route = v_Route[i];
+//        Vehicle car(i,route,0,0,route.front());
+//        G.m_Road_v[route.front()].m_queVehicle.push_back(car);
+//    }
 }
 
 /**
@@ -93,7 +93,7 @@ void runSimulation(Graph &G) {
                         //判断红绿灯情况
                         G.m_CrossRoad_v[G.m_Road_v[site].m_CrossRoadToSite].m_CTrafficLight_Light.clock(SYSTEM_TIME);
                         //如果可以通行
-                        printf(BLUE"路口ID:%d,打算从%d号路转至%d\n,路口数%d",G.m_Road_v[site].m_CrossRoadToSite,it.m_nSiteRoadID,next,G.m_CrossRoad_v[G.m_Road_v[site].m_CrossRoadToSite].JunctionRoad.size());
+                        printf(BLUE"路口ID:%d,打算从%d号路转至%d,路口数%d\n",G.m_Road_v[site].m_CrossRoadToSite,it.m_nSiteRoadID,next,G.m_CrossRoad_v[G.m_Road_v[site].m_CrossRoadToSite].JunctionRoad.size());
                         try {
                             if (G.m_CrossRoad_v[G.m_Road_v[site].m_CrossRoadToSite].m_CTrafficLight_Light.getStatus(
                                     it.m_nSiteRoadID, next)) {

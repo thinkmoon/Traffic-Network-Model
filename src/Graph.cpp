@@ -62,31 +62,4 @@ void Graph::output() {
     RoadFile << endl << "---------------+ Road END +--------------------" << endl;
     RoadFile.close();
 }
-//
-//int Graph::getRoadID(int PointFromID,int PointToID) {
-//    int n_RoadID=-1;
-//    auto p = RoadTable[PointFromID].link;
-//    while(p != nullptr){
-//        if(p->m_ID == PointToID){
-//            n_RoadID = p->roadID;
-//        }
-//        p = p->link;
-//    }
-//    return n_RoadID;
-//}
-//
-//void RoadNode::addNode(int m_ID, double m_length, int roadID, int ParallelRoadID) {
-//    auto node = new RoadNode(m_ID, m_length, roadID, ParallelRoadID);
-//    if (link == nullptr) {
-//        link = node;
-//    } else {
-//        RoadNode *q = link, *p = link->link;
-//        while (p != nullptr) {
-//            q = p;
-//            p = p->link;
-//        }
-//        q->link = node;
-//    }
-//    length++;
-//}
 
