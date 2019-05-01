@@ -20,8 +20,8 @@ public:
 
     void setAllGreen();
 
-    void addWait(int from, int to);
-    void subWait(int from, int to);
+    void addWait(int from, int to, int weight);
+    void subWait(int from, int to, int weight, int value);
 
     bool getStatus(int from, int to);
     /**
@@ -31,6 +31,7 @@ public:
     void setType(int type);
     //路口标号
     int roadID[8];
+    map<int, int> mp;
     //路口是否能走通
     int status[8][8] = {0};
     int wait[8][8] = {0};

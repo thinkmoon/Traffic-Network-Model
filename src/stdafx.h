@@ -18,6 +18,7 @@
 #include <sstream>
 #include <random>
 #include <deque>
+#include <map>
 
 #include <chrono>
 #include <thread>

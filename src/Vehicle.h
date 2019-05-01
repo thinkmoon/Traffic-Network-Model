@@ -17,9 +17,9 @@ public:
 
     void showself() {
         //ofstream out(DIR_RES"vehicle.txt");
-        cout << BLACK ;
+        cout << BLACK;
         if (queRoute.empty()) {
-            cout << "it[" << m_nID << "] is return" ;
+            cout << "it[" << m_nID << "] is return";
             cout << "distance have " << dDistance << "m" << endl;
         } else {
             cout << "it[" << m_nID << "] is a Vehicle :";
@@ -28,9 +28,9 @@ public:
             auto r = this->queRoute;
             if (r.empty())
                 return;
-            cout << " To :" << r.back() ;
+            cout << " To :" << r.back();
             cout << " it's site is :" << m_nSiteRoadID << " distance:" << dDistance;
-            cout <<  " route:";
+            cout << " route:";
             while (!r.empty()) {
                 cout << r.front() << " ";
                 r.pop();
@@ -40,7 +40,9 @@ public:
     }
 
 public:
-    long long int time=0;
+    long long int time = 0;
+    // 表示该车能影响交通的权重和权值
+    int weight = 100,value = 0;
     int m_nID, m_nSiteRoadID;
     double dDistance;
     float fSpec; //spec = ( 100 - congestion ) + ( 10 - rand(0,20))

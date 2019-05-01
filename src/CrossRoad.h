@@ -58,6 +58,7 @@ public:
     vector<Node> JunctionRoad;
     //该路口的交通灯
     TrafficLight m_CTrafficLight_Light;
+    int row=0,col=0;
 };
 
 
