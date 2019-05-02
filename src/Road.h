@@ -30,7 +30,7 @@ public:
     int m_nID;
     int m_CrossRoadFromSite, m_CrossRoadToSite;
     double m_dLength;
-    int m_nCongestion; //(50 * car / length),[0,100] 拥挤度
+    int m_nCongestion = 0; //(50 * car / length),[0,100] 拥挤度
     deque<Vehicle> m_queVehicle;
 };
 

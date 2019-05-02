@@ -47,6 +47,7 @@ public:
     double dDistance;
     float fSpec; //spec = ( 100 - congestion ) + ( 10 - rand(0,20))
     queue<int> queRoute;
+    int siteArea[2],futureArea[2];
 };
 
 

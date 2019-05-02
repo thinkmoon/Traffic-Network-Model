@@ -29,17 +29,22 @@ public:
      * @param type
      */
     void setType(int type);
+    void setID(int ID){
+        this->ID = ID;
+    }
     //路口标号
     int roadID[8];
     map<int, int> mp;
     //路口是否能走通
     int status[8][8] = {0};
-    int wait[8][8] = {0};
+    int wait[8][8] = {INT32_MIN};
     int type;
     //表示可通过的方向（目标方向）
     //AllRED = 0,LeftGreen = 1,DownGreen = 2,RightGreen = 3,UpGreen = 4,UpDownGreen = 5,LeftRightGreen = 6,cross1 = 7,cross2 = 8
     int emStatus = 0;
     long long int time = 0;
+    // 路口索引ID
+    int ID;
 };
 
 

@@ -111,8 +111,14 @@ bool TrafficLight::getStatus(int from, int to) {
     if (status[from_site][to_site] == 1) {
         cout << GREEN << "准备转向:" << from_site << "->" << to_site << endl;
         return true;
-    } else {
+    } else if(from_site % 2 == to_site %2){
+        cout << RED << "打算从" << from << "号路转向" << to << "号路" << endl;
         cout << RED << "准备转向:" << from_site << "->" << to_site << endl;
+        cout << RED << "路口ID:" << ID << "不存在的状态";
+        exit(1);
+    }
+    else {
+        cout << RED << type << "路口，准备转向:" << from_site << "->" << to_site << endl;
         return false;
     }
 }
